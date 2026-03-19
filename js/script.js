@@ -12,4 +12,34 @@ document.addEventListener('DOMContentLoaded', function () {
             }, 6000);
         }
     }
+
+    const revealTargets = document.querySelectorAll(
+        '.about-section .container, .contact-section .container, .about-page-section .container, .research-section .container, .contact-page-section .container, .news-title-item, .news-item, .direction-card, .team-member, .product-card, .equipment-card, .news-entry, .news-article, .paper-list li'
+    );
+
+    revealTargets.forEach((element, index) => {
+        element.classList.add('reveal-on-scroll');
+        element.style.transitionDelay = `${Math.min((index % 8) * 60, 360)}ms`;
+    });
+
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            },
+            {
+                threshold: 0.18,
+                rootMargin: '0px 0px -24px 0px'
+            }
+        );
+
+        revealTargets.forEach((element) => observer.observe(element));
+    } else {
+        revealTargets.forEach((element) => element.classList.add('is-visible'));
+    }
 });
